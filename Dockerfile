@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install dependencies and build
 COPY package.json package-lock.json* ./
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 COPY . ./
 RUN npm run build
 
@@ -22,7 +22,7 @@ COPY --from=builder /app/package-lock.json ./package-lock.json
 # Install only production dependencies to keep image small and compatible
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
   && rm -rf /var/lib/apt/lists/*
-RUN npm ci --omit=dev --production || npm install --production
+RUN npm install --production --legacy-peer-deps
 
 ENV PORT=8080
 EXPOSE 8080
