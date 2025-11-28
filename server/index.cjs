@@ -3,7 +3,12 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = parseInt(process.env.PORT, 10) || 8080;
+
+// Helpful startup logs for Cloud Run troubleshooting
+console.log('Starting civicai-frontend server...');
+console.log('NODE_ENV=', process.env.NODE_ENV);
+console.log('PORT=', PORT);
 
 // Serve static frontend
 const distPath = path.resolve(__dirname, '..', 'dist');
@@ -18,9 +23,17 @@ app.get('/api/cases', (req, res) => {
   try {
     const casesFile = path.resolve(__dirname, '..', 'src', 'mocks', 'cases.json');
     if (!fs.existsSync(casesFile)) {
+      console.error('cases.json not found at', casesFile);
       return res.status(500).json({ error: 'cases.json not found on server' });
     }
-    const data = JSON.parse(fs.readFileSync(casesFile, 'utf8'));
+    const dataRaw = fs.readFileSync(casesFile, 'utf8');
+    let data;
+    try {
+      data = JSON.parse(dataRaw);
+    } catch (err) {
+      console.error('Failed to parse cases.json', err);
+      return res.status(500).json({ error: 'invalid cases.json' });
+    }
     let filtered = Array.isArray(data) ? data.slice() : [];
     const priority = req.query.priority;
     if (priority) filtered = filtered.filter((c) => c.priority === priority);
@@ -48,6 +61,6 @@ app.get('*', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server listening on 0.0.0.0:${PORT}`);
 });
