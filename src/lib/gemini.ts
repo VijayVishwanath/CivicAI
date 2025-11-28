@@ -28,12 +28,8 @@ interface GeminiRequestBody {
   };
 }
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+// Removed VITE_GEMINI_API_KEY reference
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-
-if (!GEMINI_API_KEY) {
-  console.warn("[Gemini] VITE_GEMINI_API_KEY environment variable not found");
-}
 
 /**
  * System prompt for the municipality AI agent
@@ -127,9 +123,6 @@ export async function sendMessageToGemini(
   conversationHistory: MessageContent[] = [],
   onChunkReceived?: (chunk: string) => void
 ): Promise<string> {
-  if (!GEMINI_API_KEY) {
-    throw new Error("Gemini API key not configured. Set VITE_GEMINI_API_KEY environment variable.");
-  }
 
   // Build conversation history in Gemini format
   const contents: { role: "user" | "model"; parts: { text: string }[] }[] = conversationHistory.map((msg) => ({
@@ -159,7 +152,7 @@ export async function sendMessageToGemini(
   try {
     console.log("[Gemini] Sending message to API...");
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+  const response = await fetch(`${GEMINI_API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

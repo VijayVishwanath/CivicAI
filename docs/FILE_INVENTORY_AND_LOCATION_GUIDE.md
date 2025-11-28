@@ -245,8 +245,6 @@ VITE_API_BASE_URL=http://localhost:3000/api
 
 **Already Present:**
 ```
-VITE_GOOGLE_MAPS_API_KEY=...
-VITE_GEMINI_API_KEY=...
 ```
 
 ---

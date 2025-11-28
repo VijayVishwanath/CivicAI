@@ -8,10 +8,7 @@ type PlaceResult = any;
  */
 function ensureGoogleMapsScript(apiKey: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (!apiKey) {
-      reject(new Error("Google Maps API key is not provided (VITE_GOOGLE_MAPS_API_KEY)."));
-      return;
-    }
+    // Remove API key check for VITE_GOOGLE_MAPS_API_KEY
 
     const google = (window as any).google;
 
@@ -111,13 +108,8 @@ export function useGooglePlacesAutocomplete(
 
     const initializeAutocomplete = async () => {
       try {
-        const apiKey = (import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
-        if (!apiKey) {
-          console.warn("VITE_GOOGLE_MAPS_API_KEY not set. Location autocomplete disabled.");
-          return;
-        }
-
-        const placesLibrary = await initGoogleMaps(apiKey);
+        // Remove usage of VITE_GOOGLE_MAPS_API_KEY
+        // const placesLibrary = await initGoogleMaps(apiKey);
         
         if (!mounted || !containerRef.current) return;
 
