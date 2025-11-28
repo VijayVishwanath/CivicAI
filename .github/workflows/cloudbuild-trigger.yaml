@@ -1,0 +1,31 @@
+name: "Cloud Build: Deploy CivicAI Frontend to Cloud Run"
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: civicai-479609
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Build and push Docker image
+        run: |
+          gcloud builds submit --tag gcr.io/civicai-479609/civicai-frontend
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy civicai-frontend \
+            --image gcr.io/civicai-479609/civicai-frontend \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --port 8080
