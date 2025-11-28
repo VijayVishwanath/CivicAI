@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Upload, Camera, MapPin, CheckCircle, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import LocationInput from "@/components/LocationInput";
+
 
 export default function SubmitCase() {
   const { toast } = useToast();
@@ -154,15 +154,11 @@ export default function SubmitCase() {
           <CardContent className="space-y-4">
             <div>
               <label className="text-sm font-medium">Location / Ward</label>
-                <LocationInput
+              <Input
                 value={location}
-                onChange={(value, details) => {
-                  setLocation(value);
-                  setPlaceDetails(details);
-                }}
+                onChange={e => setLocation(e.target.value)}
                 placeholder="e.g., Andheri West, Ward K/W"
-                  includedRegionCodes={["in"]}
-                />
+              />
             </div>
             
             <div>
