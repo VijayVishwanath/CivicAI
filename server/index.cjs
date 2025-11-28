@@ -10,13 +10,28 @@ console.log('Starting civicai-frontend server...');
 console.log('NODE_ENV=', process.env.NODE_ENV);
 console.log('PORT=', PORT);
 
+// Global error handlers so any crash logs surface in Cloud Run logs
+process.on('uncaughtException', (err) => {
+  console.error('uncaughtException', err && err.stack ? err.stack : err);
+  // allow logs to flush then exit so Cloud Run can restart the revision if necessary
+  setTimeout(() => process.exit(1), 200);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('unhandledRejection', reason);
+  setTimeout(() => process.exit(1), 200);
+});
+
 // Serve static frontend
 const distPath = path.resolve(__dirname, '..', 'dist');
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
+  console.log('Serving static from', distPath);
 } else {
   console.warn('Warning: dist folder not found. Make sure you run the build step.');
 }
+
+// Lightweight health/readiness endpoint for quick checks
+app.get('/_health', (req, res) => res.status(200).json({ status: 'ok' }));
 
 // API: /api/cases - paginated, priority filter, top-100 limit
 app.get('/api/cases', (req, res) => {
