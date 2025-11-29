@@ -111,8 +111,8 @@ export function useGooglePlacesAutocomplete(
 
     const initializeAutocomplete = async () => {
       try {
-  const apiKey = "AIzaSyAnwXmR3_GgSbs5TFXmm5L88E2AzWxFD_M";
-  const placesLibrary = await initGoogleMaps(apiKey);
+  // API key removed for security
+  // const placesLibrary = await initGoogleMaps(apiKey);
         
         if (!mounted || !containerRef.current) return;
 

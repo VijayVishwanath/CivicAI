@@ -28,7 +28,7 @@ interface GeminiRequestBody {
   };
 }
 
-const GEMINI_API_KEY = "AIzaSyBUL73dGQ4I0ygx7xfZl8jl_Ak7WLytoVQ";
+const GEMINI_API_KEY = ""; // API key removed for security
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
 /**
@@ -152,7 +152,8 @@ export async function sendMessageToGemini(
   try {
     console.log("[Gemini] Sending message to API...");
 
-  const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+  // API key must be provided securely, not hardcoded
+  const response = await fetch(`${GEMINI_API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
