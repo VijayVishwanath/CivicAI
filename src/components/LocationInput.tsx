@@ -41,7 +41,7 @@ export default function LocationInput({
 
     const initAutocompleteService = async () => {
       try {
-        // Remove usage of VITE_GOOGLE_MAPS_API_KEY
+  const apiKey = "AIzaSyAnwXmR3_GgSbs5TFXmm5L88E2AzWxFD_M";
 
         // Ensure Google Maps API is loaded
         if (!(window as any).google?.maps) {
@@ -54,8 +54,7 @@ export default function LocationInput({
             }
 
             const script = document.createElement("script");
-            // Remove apiKey usage since VITE_GOOGLE_MAPS_API_KEY is removed
-            script.src = `https://maps.googleapis.com/maps/api/js?libraries=places`;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
             script.async = true;
             script.defer = false;
 
